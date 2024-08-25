@@ -1,28 +1,38 @@
 class Solution {
-    public boolean isUgly(int N) {
-        if(N < 1){return false;}
-  
-  
-      //  Solution 1: 
-        while(N % 2 == 0){
-            N = N / 2;
-        } 
-        while(N % 3 == 0){
-            N = N / 3;
-        } 
-        while(N % 5 == 0){
-            N = N / 5;
-        } 
+    public boolean isUgly(int n) {
+        if(n <= 0){
+            return false;
+        }
+        while(n % 2 == 0){
+            n = n /2;
+        }
+        while(n % 3 == 0){
+            n = n / 3;
+        }
+        while(n % 5 == 0){
+            n = n / 5;
+        }
 
-        
+        if(isPrime(n)){
+            return false;
+        }
 
+        for(int i = 7; i <= n / 2; i = i + 2){
+            if(n % i == 0){
+                return false;
+            }
+        }
 
-    /** Solution 2: 1 ms, 39.39 mb    
-    for(int i = 2; i <= 5; i = (int)((double)i * 1.7)){
-        while(N % i == 0){ N = N / i; }
+        return true;
     }
-**/
-    return N == 1;
 
+    public boolean isPrime(int n){
+        if(n == 1){ return false; }
+        for(int i = 5; i <= Math.sqrt(n); i = i + 6){
+            if(n % i == 0 || n % (i + 2) == 0){
+                return false;
+            }
+        }
+        return true;
     }
 }
