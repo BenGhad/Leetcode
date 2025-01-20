@@ -19,17 +19,13 @@ class Solution {
         }
 
         while(!pq.isEmpty()){
-            ListNode small = pq.poll();
-            current.next = small;
+            ListNode node = pq.poll();
+            if(node.next != null) pq.offer(node.next);
+            current.next = node;
             current = current.next;
-            if(small.next != null){
-                pq.offer(small.next);
-            }
         }
 
-
         return dummy.next;
-        
 
     }
 }
