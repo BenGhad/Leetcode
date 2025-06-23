@@ -1,41 +1,20 @@
 class Solution {
     public int findMinDifference(List<String> timePoints) {
-        int s = timePoints.size();
-        if(s > 1440){return 0;}
+        int[] mins = new int[timePoints.size()];
 
-        int[] minutes = new int[1440];
-        int[] array = new int[s];
+        for(int i = 0; i < timePoints.size(); i++){
+            String s = timePoints.get(i);
+            int hours = Integer.parseInt(s.substring(0, 2));
+            int minutes = Integer.parseInt(s.substring(3));
+            mins[i] = hours * 60 + minutes;
+        }
+        Arrays.sort(mins);
+        
+        int min = (mins[0] - mins[mins.length - 1] + 1440) % 1440;
+        for(int i = 0; i < mins.length - 1; i++){
+            min = Math.min(min, mins[i + 1] - mins[i]);
+        }
 
-        for(int i = 0; i < s; i++){
-            int minutia = convert(timePoints.get(i));
-            if(minutes[minutia] == 1){return 0;}
-            minutes[minutia]++;
-        }
-        int prev = -1;
-        for(int i = 0; i < minutes.length; i++){
-            if(minutes[i] == 1){
-                prev = i;
-                break;
-            }
-        }
-        int first = prev; 
-        int last = -1;
-        
-        
-        int difference = Integer.MAX_VALUE;
-        
-        for(int i = prev + 1; i < minutes.length; i++){
-            if(minutes[i] != 0){
-                difference = Math.min(difference, i - prev);
-                prev = i;     
-                last = i; 
-            }
-        }
-        
-        return Math.min(difference, 1440 - last + first);
-    }
-    public int convert(String time){
-        int hour = Integer.parseInt(time.substring(0, 2));
-        return hour * 60 + Integer.parseInt(time.substring(3));
+        return min;
     }
 }
