@@ -1,31 +1,47 @@
 class Solution {
-    public int minReorder(int n, int[][] connections) {
-        List<int[]>[] adj = new ArrayList[n];
-        for(int i = 0; i < n; i++) adj[i] = new ArrayList<>();
-
-        for(int[] conn : connections){
-            int from = conn[0];
-            int to = conn[1];
-            adj[from].add(new int[]{to, 0}); // original direction
-            adj[to].add(new int[]{from, 1}); // reverse direction
+    public int minReorder(int n, int[][] edges) {
+        List<Integer>[] forward = new ArrayList[n];
+        List<Integer>[] backward = new ArrayList[n];
+        
+        for(int i = 0; i < n; i++){
+            forward[i] = (new ArrayList<>());
+            backward[i] = (new ArrayList<>());
         }
-
-        boolean[] visited = new boolean[n];
+        
+        for(int[] edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            
+            forward[u].add(v);
+            backward[v].add(u);
+        }
+        
+        Set<Integer> visited = new HashSet<>();
+        visited.add(0);
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(0);
-        int ans = 0;
+        
+        int swp = 0;
+        
         while(!queue.isEmpty()){
             int city = queue.poll();
-            visited[city] = true;
-            for(int[] i : adj[city]){
-                int next = i[0];
-                if(!visited[next]){
-                    queue.offer(next);
-                    if(i[1] == 0) ans++;
+            for(int c : forward[city]){
+                if(!visited.contains(c)){
+                    queue.add(c);
+                    visited.add(c);
+                    swp++;
                 }
             }
-        }
+            for(int c : backward[city]){
+                if(!visited.contains(c)){
+                    queue.add(c);
+                    visited.add(c);
+                }
+            }
 
-        return ans;
+        }
+        
+        
+        return swp;
     }
 }
