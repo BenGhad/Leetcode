@@ -1,40 +1,50 @@
 class Solution {
     public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] dist = new int[m][n];
+        
         Queue<int[]> queue = new LinkedList<int[]>();
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[0].length; j++) {
-                if (mat[i][j] == 0) {
-                    queue.offer(new int[] { i, j });
-                }
-            }
-        }
-        int[][] dir = new int[][] {
-                { 1, 0 },
-                { -1, 0 },
-                { 0, 1 },
-                { 0, -1 }
-        };
-        boolean[][] visited = new boolean[mat.length][mat[0].length];
-        while (!queue.isEmpty()) {
-            int[] cell = queue.poll();
-            int x = cell[0];
-            int y = cell[1];
-            if(mat[x][y] != 0) mat[x][y] = Integer.MAX_VALUE; 
-            visited[x][y] = true;
-            for (int[] d : dir) {
-                int newX = x + d[0];
-                int newY = y + d[1];
-                if (newX < 0 || newY < 0 || newX >= mat.length || newY >= mat[0].length)
-                    continue;
-                if (visited[newX][newY]) {
-                    mat[x][y] = Math.min(mat[x][y], mat[newX][newY] + 1);
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(mat[i][j] == 0){
+                    queue.offer(new int[]{i, j});
                 } else {
-                    queue.offer(new int[] { newX, newY });
+                    dist[i][j] = Integer.MAX_VALUE;
                 }
             }
-
         }
-        return mat;
-
+        
+        int[][] dir = new int[][]{
+            {0, 1},
+            {0, -1},
+            {1, 0},
+            {-1, 0}
+        };
+        
+        
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                int[] pos = queue.poll();
+                int x = pos[0];
+                int y = pos[1];
+                
+                for(int d[] : dir){
+                    int dx = x + d[0];
+                    int dy = y + d[1];
+                    if(dx < 0 || dy < 0 || dx >= m || dy >= n) continue;
+                    
+                    if(dist[dx][dy] > dist[x][y] + 1){
+                        dist[dx][dy] = dist[x][y] + 1;
+                        queue.offer(new int[]{dx, dy});
+                    }
+                }
+                
+            }    
+        }
+        
+        return dist;
     }
 }
