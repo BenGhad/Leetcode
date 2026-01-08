@@ -1,5 +1,10 @@
 class Solution {
     public int hammingWeight(int n) {
-        return Integer.bitCount(n);
+        int bit = 0;
+        while(n > 0){
+            bit++;
+            n &= (n - 1);
+        }
+        return bit;
     }
 }
