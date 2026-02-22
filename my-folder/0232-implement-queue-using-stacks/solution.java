@@ -1,45 +1,34 @@
 class MyQueue {
-    Stack<Integer> offer;
-    Stack<Integer> poll;
-    int mode;
-    
+    Stack<Integer> s1;
+    Stack<Integer> s2;
     public MyQueue() {
-        offer = new Stack<>();
-        poll = new Stack<>();
-        mode = 0;
+        s1 = new Stack<>();
+        s2 = new Stack<>();
     }
     
     public void push(int x) {
-        if(mode == 1) swp();
-        offer.push(x);
-        
+        while(!s2.isEmpty()){
+            s1.push(s2.pop());
+        }
+        s2.push(x);
     }
     
     public int pop() {
-        if(mode == 0) swp();
-        return poll.pop();
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        return s2.pop();
     }
     
     public int peek() {
-        if(mode == 0) swp();
-        return poll.peek();
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        return s2.peek();
     }
     
     public boolean empty() {
-        return offer.isEmpty() && poll.isEmpty();
-    }
-    
-    public void swp(){
-        if(mode == 0){
-            while(!offer.isEmpty()){
-                poll.push(offer.pop());
-            }  
-        } else if(mode == 1){
-            while(!poll.isEmpty()){
-                offer.push(poll.pop());
-            }
-        }
-        mode = (mode + 1) % 2;
+        return s1.isEmpty() && s2.isEmpty();
     }
 }
 
