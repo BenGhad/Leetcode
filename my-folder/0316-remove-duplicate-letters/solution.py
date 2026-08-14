@@ -1,5 +1,5 @@
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
+class Solution(object):
+    def removeDuplicateLetters(self, s):
         last = {}
         n = len(s)
         for i in range(n):
